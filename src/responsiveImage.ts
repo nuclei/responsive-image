@@ -87,6 +87,9 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
       _img.addEventListener('load', () => {
         this._img = this.shadowRoot.querySelector('img')
         this._img.setAttribute('src', this._src)
+        if (this._aspectRatio === null) {
+          this.setAttribute('ratio', (100 * (this._img.naturalHeight / this._img.naturalWidth)) + '%')
+        }
       })
       _img.setAttribute('src', this._src)
       this._destroyObserver()
@@ -111,7 +114,6 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
     this._observer = new IntersectionObserver((changes) => {
       changes.forEach((change) => {
         if (change.isIntersecting) {
-          console.log('update to not run per IntersectionObserver')
           change.target.setAttribute('active', 'true')
         }
       })
@@ -134,7 +136,9 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
    * @description set the aspect ratio
    */
   private _setAspectRatio () {
-    this.shadowRoot.querySelector('figure').style.paddingBottom = this.ratio + '%';
+    if (this._aspectRatio) {
+      this.shadowRoot.querySelector('figure').style.paddingBottom = this._aspectRatio + '%'
+    }
   }
   /**
   * @method setter src
@@ -212,15 +216,16 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
    */
   set ratio (aspectRatio: string) {
     if (this._aspectRatio === aspectRatio) return
-    let ratio = aspectRatio.split(":")
-    if (ratio.length > 1) {
-      ratio =  100 * (ratio[1] / ratio[0])
+    let ratios = aspectRatio.split(':')
+    let ratio : number = null
+    if (ratios.length > 1) {
+      ratio = 100 * (parseInt(ratios[1]) / parseInt(ratios[0]))
     } else {
-      ratio = parseInt(ratio[0])
+      ratio = parseInt(ratios[0])
     }
     if (!isNaN(ratio)) {
       this._aspectRatio = ratio
-      console.log(ratio)
+      this._setAspectRatio()
     }
   }
   /**
@@ -228,9 +233,6 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
   * @description get the aspectRatio property
    */
   get ratio () {
-    if (this._aspectRatio === null && this._img !== null) {
-      this._aspectRatio = 100 / (this._img.naturalWidth * this._img.naturalHeight)
-    }
     return this._aspectRatio
   }
 }

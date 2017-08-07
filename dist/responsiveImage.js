@@ -7,7 +7,6 @@ const makeTemplate = function (strings) {
     template.innerHTML = html;
     return template;
 };
-//# sourceMappingURL=makeTemplate.js.map
 
 var ready = function (fn) {
     if (document.readyState !== 'loading') {
@@ -17,9 +16,6 @@ var ready = function (fn) {
         document.addEventListener('DOMContentLoaded', fn);
     }
 };
-
-
-//# sourceMappingURL=ready.js.map
 
 let template = makeTemplate `<style>
     :host{
@@ -77,6 +73,9 @@ class ResponsiveImage extends HTMLElement {
             _img.addEventListener('load', () => {
                 this._img = this.shadowRoot.querySelector('img');
                 this._img.setAttribute('src', this._src);
+                if (this._aspectRatio === null) {
+                    this.setAttribute('ratio', (100 * (this._img.naturalHeight / this._img.naturalWidth)) + '%');
+                }
             });
             _img.setAttribute('src', this._src);
             this._destroyObserver();
@@ -93,7 +92,6 @@ class ResponsiveImage extends HTMLElement {
         this._observer = new IntersectionObserver((changes) => {
             changes.forEach((change) => {
                 if (change.isIntersecting) {
-                    console.log('update to not run per IntersectionObserver');
                     change.target.setAttribute('active', 'true');
                 }
             });
@@ -108,7 +106,9 @@ class ResponsiveImage extends HTMLElement {
         this._observer.unobserve(this);
     }
     _setAspectRatio() {
-        this.shadowRoot.querySelector('figure').style.paddingBottom = this.ratio + '%';
+        if (this._aspectRatio) {
+            this.shadowRoot.querySelector('figure').style.paddingBottom = this._aspectRatio + '%';
+        }
     }
     set src(src) {
         if (this._src === src)
@@ -151,22 +151,20 @@ class ResponsiveImage extends HTMLElement {
     set ratio(aspectRatio) {
         if (this._aspectRatio === aspectRatio)
             return;
-        let ratio = aspectRatio.split(":");
-        if (ratio.length > 1) {
-            ratio = 100 * (ratio[1] / ratio[0]);
+        let ratios = aspectRatio.split(':');
+        let ratio = null;
+        if (ratios.length > 1) {
+            ratio = 100 * (parseInt(ratios[1]) / parseInt(ratios[0]));
         }
         else {
-            ratio = parseInt(ratio[0]);
+            ratio = parseInt(ratios[0]);
         }
         if (!isNaN(ratio)) {
             this._aspectRatio = ratio;
-            console.log(ratio);
+            this._setAspectRatio();
         }
     }
     get ratio() {
-        if (this._aspectRatio === null && this._img !== null) {
-            this._aspectRatio = 100 / (this._img.naturalWidth * this._img.naturalHeight);
-        }
         return this._aspectRatio;
     }
 }
