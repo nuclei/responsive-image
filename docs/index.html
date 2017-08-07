@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Web Component Skeleton</title>
+    <script src="polyfill/webcomponents-loader.js"></script>
+    <script src="../dist/responsiveImage.js"></script>
+    <style media="screen">
+       body{
+
+       }
+      responsive-image{
+        display: block;
+        /*width: auto;
+        height: 200px;
+        max-width: 100%;*/
+      }
+    </style>
+  </head>
+  <body>
+    <div style="padding-top: 1000px;"></div>
+    <responsive-image
+      threshold="0.434"
+      placeholder="placeholder.png"
+      src="nature-forest-trees-fog.jpeg"
+      alt="yo"
+      ratio="4:3"
+    >Image Caption</responsive-image>
+
+    <responsive-image
+      threshold="0.434"
+      placeholder="placeholder.png"
+      src="nature-forest-trees-fog.jpeg"
+      ratio="53%"
+      alt="yo"
+    ></responsive-image>
+
+    <responsive-image class="click" active="false"
+      placeholder="placeholder.png"
+      ratio="dyo%"
+      src="https://static.pexels.com/photos/200027/pexels-photo-200027.jpeg"
+    ></responsive-image>
+
+    <script type="text/javascript">
+    document.querySelectorAll('.click').forEach((item) => {
+      item.addEventListener('click', (event) => {
+        event.target.active = true
+      })
+    })
+    // for(i = 1000; i > 0; i--){
+    //   let div = document.createElement('div')
+    //   div.innerHTML = `<responsive-image
+    //         style="width: 100%; height: 200px;"
+    //         placeholder="placeholder.png"
+    //         src="nature-forest-trees-fog.jpeg"
+    //       ></responsive-image>`
+    //   document.body.append(div)
+    // }
+    </script>
+  </body>
+</html>

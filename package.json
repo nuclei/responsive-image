@@ -1,0 +1,33 @@
+{
+  "name": "responsive-image",
+  "version": "0.1.0",
+  "description": "A responsive image tags, with lazy loading",
+  "main": "dist/responsiveImage.js",
+  "config": {
+    "src": "src/responsiveImage.ts"
+  },
+  "keywords": [
+    "vanilla web components",
+    "responsive image"
+  ],
+  "author": "Lukas Oppermann",
+  "license": "MIT",
+  "devDependencies": {
+    "@webcomponents/webcomponentsjs": "^1.0.1",
+    "readyjs": "^2.0.0",
+    "rollup": "^0.41.6",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-typescript": "^0.8.1",
+    "rollup-watch": "^3.2.2",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.2",
+    "typescript": "^2.4.0",
+    "typescript-eslint-parser": "^2.1.0"
+  },
+  "scripts": {
+    "build": "npm test && rollup -c",
+    "build:watch": "npm run build -- -w",
+    "demo": "cp -r node_modules/@webcomponents/webcomponentsjs docs/polyfill",
+    "test": "standard src/*.ts --parser typescript-eslint-parser | snazzy"
+  }
+}
