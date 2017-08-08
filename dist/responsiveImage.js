@@ -7,6 +7,7 @@ const makeTemplate = function (strings) {
     template.innerHTML = html;
     return template;
 };
+//# sourceMappingURL=makeTemplate.js.map
 
 var ready = function (fn) {
     if (document.readyState !== 'loading') {
@@ -17,6 +18,9 @@ var ready = function (fn) {
     }
 };
 
+
+//# sourceMappingURL=ready.js.map
+
 let template = makeTemplate `<style>
     :host{
       display: block;
@@ -24,14 +28,17 @@ let template = makeTemplate `<style>
     img{
       width: 100%;
       height: auto;
+      vertical-align: top;
     }
     figure{
       margin: 0;
       display: block;
       position: relative;
+      overflow: hidden;
+    }
+    :host([ratio]) figure{
       height: 0;
       width: 100%;
-      overflow: hidden;
     }
   </style>
   <figure>
@@ -66,17 +73,14 @@ class ResponsiveImage extends HTMLElement {
         this._createObserver();
     }
     _loadImage() {
-        if (this._src === undefined || this._active !== 'true')
+        if (this._src === null || this._active !== 'true')
             return;
+        let _img = document.createElement('img');
+        _img.addEventListener('load', () => {
+            this._img = this.shadowRoot.querySelector('img');
+            this._img.setAttribute('src', this._src);
+        });
         ready(() => {
-            let _img = document.createElement('img');
-            _img.addEventListener('load', () => {
-                this._img = this.shadowRoot.querySelector('img');
-                this._img.setAttribute('src', this._src);
-                if (this._aspectRatio === null) {
-                    this.setAttribute('ratio', (100 * (this._img.naturalHeight / this._img.naturalWidth)) + '%');
-                }
-            });
             _img.setAttribute('src', this._src);
             this._destroyObserver();
         });
@@ -114,6 +118,9 @@ class ResponsiveImage extends HTMLElement {
         if (this._src === src)
             return;
         this._src = src;
+        if (document.readyState !== 'loading') {
+            this._loadImage();
+        }
     }
     get src() {
         return this._src;
