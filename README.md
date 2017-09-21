@@ -26,8 +26,20 @@ I recommend the [webcomponentsjs](https://github.com/webcomponents/webcomponents
 ```
 
 ### Placeholder
+This image will be used as a fill in until the real image is downloaded. It could be something like a very small version of the image or any other fill in.
+
+```html
+<responsive-image src="image.jpg" placeholder="placeholder.png"></responsive-image>
+```
 
 ### Ratio
+The ratio is used to properly scale your image. If you set your `responsive-image` to have a width of `100%` it will always be resized using the provided ratio, even when the image is not yet loaded.
+
+A ratio can be defined as width to height, e.g. `4:3` or as a percentage value that is calculated like this:`100 * (height / width)` e.g. `100 * (3/4)` which is `75%`.
+
+```html
+<responsive-image src="image.jpg" ratio="4:3"></responsive-image>
+```
 
 ### Active
 

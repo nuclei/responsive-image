@@ -20,6 +20,8 @@ let template = makeTemplate`<style>
       display: block;
       position: relative;
       overflow: hidden;
+      height: 100%;
+      width: 100%;
     }
     :host([ratio]) figure{
       height: 0;
@@ -148,7 +150,7 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
   set src (src: string) {
     if (this._src === src) return
     this._src = src
-    if(document.readyState !== 'loading'){
+    if (document.readyState !== 'loading') {
       this._loadImage()
     }
   }

@@ -7,7 +7,6 @@ const makeTemplate = function (strings) {
     template.innerHTML = html;
     return template;
 };
-//# sourceMappingURL=makeTemplate.js.map
 
 var ready = function (fn) {
     if (document.readyState !== 'loading') {
@@ -17,9 +16,6 @@ var ready = function (fn) {
         document.addEventListener('DOMContentLoaded', fn);
     }
 };
-
-
-//# sourceMappingURL=ready.js.map
 
 let template = makeTemplate `<style>
     :host{
@@ -35,6 +31,8 @@ let template = makeTemplate `<style>
       display: block;
       position: relative;
       overflow: hidden;
+      height: 100%;
+      width: 100%;
     }
     :host([ratio]) figure{
       height: 0;
