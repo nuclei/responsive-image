@@ -20,11 +20,11 @@ template.innerHTML = `<style>
       height: auto;
       vertical-align: top;
     }
-    :host([fillmode]) img[fillmode="height"]{
+    :host([resizing]) img[fillmode="height"]{
       height: 100%;
       width: auto;
     }
-    :host([fillmode]) img[fillmode="width"]{
+    :host([resizing]) img[fillmode="width"]{
       height: auto;
       width: 100%;
     }
