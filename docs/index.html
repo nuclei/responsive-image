@@ -4,34 +4,34 @@
     <meta charset="utf-8">
     <title>Web Component Skeleton</title>
     <script src="polyfill/webcomponents-loader.js"></script>
-    <script src="../dist/responsiveImage.js"></script>
+    <script src="./responsiveImage.js"></script>
     <style media="screen">
        body{
 
        }
-      responsive-image{
-        display: block;
-        /*width: auto;
-        height: 200px;
-        max-width: 100%;*/
-      }
     </style>
   </head>
   <body>
+    <responsive-image
+      active="true"
+      placeholder="placeholder.png"
+      src="https://unsplash.it/800/600"
+      alt="yo"
+      style="width: 100%; min-height: 300px;"
+    >Image Caption</responsive-image>
     <div style="padding-top: 1000px;"></div>
     <responsive-image
-      threshold="0.434"
+      active="true"
       placeholder="placeholder.png"
       src="https://unsplash.it/800/600"
       alt="yo"
       ratio="4:3"
     >Image Caption</responsive-image>
-
+<!-- threshold="0.434" -->
     <responsive-image
-      threshold="0.434"
+      active="true"
       placeholder="placeholder.png"
       src="nature-forest-trees-fog.jpeg"
-      ratio="53%"
       alt="yo"
     ></responsive-image>
 

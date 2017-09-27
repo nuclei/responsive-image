@@ -25,8 +25,9 @@
     "typescript-eslint-parser": "^2.1.0"
   },
   "scripts": {
-    "build": "npm test && rollup -c",
-    "build:watch": "npm run build -- -w",
+    "building": "npm test && rollup -c",
+    "build": "npm run building && cp dist/responsiveImage.js docs/responsiveImage.js",
+    "build:watch": "npm run building -- -w",
     "demo": "cp -r node_modules/@webcomponents/webcomponentsjs docs/polyfill",
     "test": "standard src/*.ts --parser typescript-eslint-parser | snazzy"
   }

@@ -1,27 +1,38 @@
 /* global HTMLElement IntersectionObserver */
 'use strict'
 
-import { makeTemplate } from './makeTemplate'
 import { ready } from '../node_modules/readyjs/dist/ready.js'
 
 declare const ShadyCSS // eslint-disable-line no-unused-vars
 
-let template = makeTemplate`<style>
+let template = document.createElement('template')
+template.innerHTML = `<style>
     :host{
-      display: block;
+      display: flex;
     }
     img{
       width: 100%;
       height: auto;
       vertical-align: top;
     }
+    :host([orientation="portrait"]) img{
+      height: 100%;
+      width: auto;
+    }
+    :host([align="center"]) img{
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    :host([align="right"]) img{
+      position: absolute;
+      right: 0;
+    }
     figure{
       margin: 0;
       display: block;
       position: relative;
       overflow: hidden;
-      height: 100%;
-      width: 100%;
     }
     :host([ratio]) figure{
       height: 0;
@@ -30,7 +41,8 @@ let template = makeTemplate`<style>
   </style>
   <figure>
     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" />
-  </figure>`
+  </figure>
+`
 
 class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-vars
   /* Typescript: declare variables */
@@ -79,6 +91,49 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
     this._setAspectRatio()
     this._loadPlaceholder()
     this._createObserver()
+    // attach event handler if not present
+    if (typeof window.nucleiResponsiveImages === 'undefined' || window.nucleiResponsiveImages.length <= 0) {
+      window.addEventListener('resize', this._debounce(this._resizeEvent, 50))
+      window.nucleiResponsiveImages = []
+    }
+    // add element to list for resize event
+    window.nucleiResponsiveImages.push(this)
+    // run element query for initial size
+    this._checkOrientation(this)
+  }
+  /**
+   * @method _resizeEvent
+   * @description resize event function
+   */
+  private _resizeEvent () {
+    window.nucleiResponsiveImages.forEach((element, index) => {
+      // if element not in DOM remove from array and return
+      if (!document.body.contains(element)) return window.nucleiResponsiveImages.splice(index, 1)
+      // call elementQuery if element is in dom
+      element._checkOrientation(element)
+    })
+  }
+  /**
+   * @method _debounce
+   * @description simple debounce
+   */
+  private _checkOrientation (element) {
+    if (element.clientWidth > element.clientHeight) {
+      element.setAttribute('orientation', 'landscape')
+    } else {
+      element.setAttribute('orientation', 'portrait')
+    }
+  }
+  /**
+   * @method _debounce
+   * @description simple debounce
+   */
+  private _debounce (callback: object, time: number) {
+    let timeout
+    return function () {
+      clearTimeout(timeout) // this clears the timeout so callback in timeout is not called
+      timeout = setTimeout(callback, time)
+    }
   }
   /**
    * @method _loadImage
