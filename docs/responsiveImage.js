@@ -20,9 +20,13 @@ template.innerHTML = `<style>
       height: auto;
       vertical-align: top;
     }
-    :host([orientation="portrait"]) img{
+    :host([fillmode]) img[fillmode="height"]{
       height: 100%;
       width: auto;
+    }
+    :host([fillmode]) img[fillmode="width"]{
+      height: auto;
+      width: 100%;
     }
     :host([align="center"]) img{
       position: absolute;
@@ -36,8 +40,9 @@ template.innerHTML = `<style>
     figure{
       margin: 0;
       display: block;
-      position: relative;
       overflow: hidden;
+      width: 100%;
+      height: 100%;
     }
     :host([ratio]) figure{
       height: 0;
@@ -75,6 +80,8 @@ class ResponsiveImage extends HTMLElement {
         this._setAspectRatio();
         this._loadPlaceholder();
         this._createObserver();
+        this._figure = this.shadowRoot.querySelector('figure');
+        this._img = this.shadowRoot.querySelector('img');
         if (typeof window.nucleiResponsiveImages === 'undefined' || window.nucleiResponsiveImages.length <= 0) {
             window.addEventListener('resize', this._debounce(this._resizeEvent, 50));
             window.nucleiResponsiveImages = [];
@@ -96,6 +103,7 @@ class ResponsiveImage extends HTMLElement {
         else {
             element.setAttribute('orientation', 'portrait');
         }
+        this._fillmode();
     }
     _debounce(callback, time) {
         let timeout;
@@ -109,8 +117,8 @@ class ResponsiveImage extends HTMLElement {
             return;
         let _img = document.createElement('img');
         _img.addEventListener('load', () => {
-            this._img = this.shadowRoot.querySelector('img');
             this._img.setAttribute('src', this._src);
+            this._fillmode();
         });
         ready(() => {
             _img.setAttribute('src', this._src);
@@ -121,6 +129,14 @@ class ResponsiveImage extends HTMLElement {
         if (this._placeholder === null)
             return;
         this.shadowRoot.querySelector('img').setAttribute('src', this._placeholder);
+    }
+    _fillmode() {
+        if (this._img.clientWidth < this._figure.clientWidth) {
+            this._img.setAttribute('fillmode', 'width');
+        }
+        if (this._img.clientHeight < this._figure.clientHeight) {
+            this._img.setAttribute('fillmode', 'height');
+        }
     }
     _createObserver() {
         if (this._active !== undefined)

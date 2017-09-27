@@ -15,9 +15,13 @@ template.innerHTML = `<style>
       height: auto;
       vertical-align: top;
     }
-    :host([orientation="portrait"]) img{
+    :host([resizing]) img[fillmode="height"]{
       height: 100%;
       width: auto;
+    }
+    :host([resizing]) img[fillmode="width"]{
+      height: auto;
+      width: 100%;
     }
     :host([align="center"]) img{
       position: absolute;
@@ -31,8 +35,9 @@ template.innerHTML = `<style>
     figure{
       margin: 0;
       display: block;
-      position: relative;
       overflow: hidden;
+      width: 100%;
+      height: 100%;
     }
     :host([ratio]) figure{
       height: 0;
@@ -91,6 +96,8 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
     this._setAspectRatio()
     this._loadPlaceholder()
     this._createObserver()
+    this._figure = this.shadowRoot.querySelector('figure')
+    this._img = this.shadowRoot.querySelector('img')
     // attach event handler if not present
     if (typeof window.nucleiResponsiveImages === 'undefined' || window.nucleiResponsiveImages.length <= 0) {
       window.addEventListener('resize', this._debounce(this._resizeEvent, 50))
@@ -123,6 +130,7 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
     } else {
       element.setAttribute('orientation', 'portrait')
     }
+    this._fillmode()
   }
   /**
    * @method _debounce
@@ -144,8 +152,8 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
 
     let _img = document.createElement('img')
     _img.addEventListener('load', () => {
-      this._img = this.shadowRoot.querySelector('img')
       this._img.setAttribute('src', this._src)
+      this._fillmode()
     })
 
     ready(() => {
@@ -161,6 +169,18 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
     if (this._placeholder === null) return
 
     this.shadowRoot.querySelector('img').setAttribute('src', this._placeholder)
+  }
+  /**
+   * @method _fillmode
+   * @description define the fillmode
+   */
+  private _fillmode () {
+    if (this._img.clientWidth < this._figure.clientWidth) {
+      this._img.setAttribute('fillmode', 'width')
+    }
+    if (this._img.clientHeight < this._figure.clientHeight) {
+      this._img.setAttribute('fillmode', 'height')
+    }
   }
   /**
    * @method _createObserver

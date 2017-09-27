@@ -41,7 +41,11 @@ A ratio can be defined as width to height, e.g. `4:3` or as a percentage value t
 <responsive-image src="image.jpg" ratio="4:3"></responsive-image>
 ```
 
+### Resizing
+When the `resizing` attribute is present on a `<responsive-image>` the image will resize to always fill the full height and width. The aspect ratio of the image will be kept but part of the image might be cut off.
+
 ### Active
+If `active` is set to true the image will be lazyloaded immediately, even when not in view.
 
 ### Threshold & IntersectionObserver
 
