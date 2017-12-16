@@ -1,6 +1,6 @@
 {
   "name": "responsive-image",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A responsive image tags, with lazy loading",
   "main": "dist/responsiveImage.js",
   "config": {
