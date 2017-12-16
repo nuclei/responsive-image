@@ -60,6 +60,7 @@ class ResponsiveImage extends HTMLElement {
         this._placeholder = null;
         this._active = undefined;
         this._img = null;
+        this._figure = null;
         this._aspectRatio = null;
         this._observer = null;
         this._threshold = 0.5;
@@ -83,8 +84,8 @@ class ResponsiveImage extends HTMLElement {
         this._figure = this.shadowRoot.querySelector('figure');
         this._img = this.shadowRoot.querySelector('img');
         if (typeof window.nucleiResponsiveImages === 'undefined' || window.nucleiResponsiveImages.length <= 0) {
-            window.addEventListener('resize', this._debounce(this._resizeEvent, 50));
             window.nucleiResponsiveImages = [];
+            window.addEventListener('resize', this._debounce(this._resizeEvent, 50));
         }
         window.nucleiResponsiveImages.push(this);
         this._checkOrientation(this);

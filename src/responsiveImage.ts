@@ -55,6 +55,7 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
   private _placeholder: string = null // eslint-disable-line no-undef
   private _active: string = undefined // eslint-disable-line no-undef
   private _img = null // eslint-disable-line no-undef
+  private _figure = null // eslint-disable-line no-undef
   private _aspectRatio = null // eslint-disable-line no-undef
   private _observer = null // eslint-disable-line no-undef
   private _threshold: number = 0.5 // eslint-disable-line no-undef
@@ -100,8 +101,8 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
     this._img = this.shadowRoot.querySelector('img')
     // attach event handler if not present
     if (typeof window.nucleiResponsiveImages === 'undefined' || window.nucleiResponsiveImages.length <= 0) {
-      window.addEventListener('resize', this._debounce(this._resizeEvent, 50))
       window.nucleiResponsiveImages = []
+      window.addEventListener('resize', this._debounce(this._resizeEvent, 50))
     }
     // add element to list for resize event
     window.nucleiResponsiveImages.push(this)
