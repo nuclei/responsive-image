@@ -112,7 +112,13 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
     // add element to list for resize event
     window.nucleiResponsiveImages.push(this)
     // run element query for initial size
-    this._checkOrientation(this)
+    setTimeout(() => {
+      this._checkOrientation(this)
+    }, 10)
+    // second timeout to avoid racing condition issue
+    setTimeout(() => {
+      this._checkOrientation(this)
+    }, 300)
   }
   /**
    * @method _resizeEvent

@@ -93,7 +93,12 @@ class ResponsiveImage extends HTMLElement {
             window.addEventListener('resize', this._debounce(this._resizeEvent, 50));
         }
         window.nucleiResponsiveImages.push(this);
-        this._checkOrientation(this);
+        setTimeout(() => {
+            this._checkOrientation(this);
+        }, 10);
+        setTimeout(() => {
+            this._checkOrientation(this);
+        }, 300);
     }
     _resizeEvent() {
         window.nucleiResponsiveImages.forEach((element, index) => {
