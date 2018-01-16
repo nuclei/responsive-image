@@ -14,6 +14,11 @@ template.innerHTML = `<style>
       width: 100%;
       height: auto;
       vertical-align: top;
+      float: left;
+      max-width: none;
+      min-width: none;
+      max-height: none;
+      min-height: none;
     }
     :host([resizing]) img[fillmode="height"]{
       height: 100%;
