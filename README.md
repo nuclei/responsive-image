@@ -52,10 +52,12 @@ This property is used to indicate how the image should be positioned when part o
 Available options are: `top`, `bottom`, `left`, `right`, `top-right`, `top-left`, `bottom-right`, `bottom-left`.
 
 ### Active
-If `active` is set to true the image will be lazyloaded immediately, even when not in view.
+If `active` is set to true the image will be lazy-loaded immediately, even when not in view.
 
 ### Threshold & IntersectionObserver
 
 ### Load when in viewport
 
 This packages uses the `IntersectionObserver` to detect if an image is in the viewport or not. If you want to use this in browsers that do [not support the `IntersectionObserver`](http://caniuse.com/#search=IntersectionObserver) you need to include a polyfill: https://github.com/WICG/IntersectionObserver/tree/gh-pages/polyfill
+
+If you want to use this package just for its lazy-loading or if you build your own detection which triggers loading by setting `active` to true, you do not need to use the polyfill.

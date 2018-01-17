@@ -129,7 +129,7 @@ class ResponsiveImage extends HTMLElement {
         }
     }
     _createObserver() {
-        if (this._active !== undefined)
+        if (this._active !== undefined || typeof IntersectionObserver !== 'function')
             return;
         this._observer = new IntersectionObserver((changes) => {
             changes.forEach((change) => {

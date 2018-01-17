@@ -162,7 +162,7 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
    * @description create the observer
    */
   private _createObserver () {
-    if (this._active !== undefined) return
+    if (this._active !== undefined || typeof IntersectionObserver !== 'function') return
 
     this._observer = new IntersectionObserver((changes) => {
       changes.forEach((change) => {
