@@ -19,23 +19,36 @@ template.innerHTML = `<style>
       min-width: none;
       max-height: none;
       min-height: none;
-    }
-    :host([resizing]) img[fillmode="height"]{
       height: 100%;
-      width: auto;
-    }
-    :host([resizing]) img[fillmode="width"]{
-      height: auto;
       width: 100%;
+      object-fit: cover;
     }
-    :host([align="center"]) img{
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+    :host([align="top"]) img{
+      object-position: center top;
+    }
+    :host([align="bottom"]) img{
+      object-position: center bottom;
+    }
+    :host([align="left"]) img{
+      object-position: left center;
     }
     :host([align="right"]) img{
-      position: absolute;
-      right: 0;
+      object-position: right center;
+    }
+    :host([align="top-left"]) img{
+      object-position: left top;
+    }
+    :host([align="top-right"]) img{
+      object-position: right top;
+    }
+    :host([align="bottom-left"]) img{
+      object-position: left bottom;
+    }
+    :host([align="bottom-right"]) img{
+      object-position: right bottom;
+    }
+    :host([resizing="false"]) img{
+      object-fit: none;
     }
     figure{
       margin: 0;
@@ -63,7 +76,8 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
   private _figure = null // eslint-disable-line no-undef
   private _aspectRatio = null // eslint-disable-line no-undef
   private _observer = null // eslint-disable-line no-undef
-  private _threshold: number = 0.5 // eslint-disable-line no-undef
+  private _threshold: number = 0 // eslint-disable-line no-undef
+  private _offset: string = `100px` // eslint-disable-line no-undef
 
   constructor () {
     // If you define a ctor, always call super() first!
@@ -85,7 +99,7 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
    * @description return attributes that should be watched for updates
     */
   static get observedAttributes () {
-    return ['src', 'placeholder', 'active', 'threshold', 'ratio']
+    return ['src', 'placeholder', 'active', 'threshold', 'offset', 'ratio']
   }
    /**
    * @method attributeChangedCallback
@@ -104,56 +118,6 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
     this._createObserver()
     this._figure = this.shadowRoot.querySelector('figure')
     this._img = this.shadowRoot.querySelector('img')
-    // attach event handler if not present
-    if (typeof window.nucleiResponsiveImages === 'undefined' || window.nucleiResponsiveImages.length <= 0) {
-      window.nucleiResponsiveImages = []
-      window.addEventListener('resize', this._debounce(this._resizeEvent, 50))
-    }
-    // add element to list for resize event
-    window.nucleiResponsiveImages.push(this)
-    // run element query for initial size
-    setTimeout(() => {
-      this._checkOrientation(this)
-    }, 10)
-    // second timeout to avoid racing condition issue
-    setTimeout(() => {
-      this._checkOrientation(this)
-    }, 300)
-  }
-  /**
-   * @method _resizeEvent
-   * @description resize event function
-   */
-  private _resizeEvent () {
-    window.nucleiResponsiveImages.forEach((element, index) => {
-      // if element not in DOM remove from array and return
-      if (!document.body.contains(element)) return window.nucleiResponsiveImages.splice(index, 1)
-      // call elementQuery if element is in dom
-      element._checkOrientation(element)
-    })
-  }
-  /**
-   * @method _debounce
-   * @description simple debounce
-   */
-  private _checkOrientation (element) {
-    if (element.clientWidth > element.clientHeight) {
-      element.setAttribute('orientation', 'landscape')
-    } else {
-      element.setAttribute('orientation', 'portrait')
-    }
-    this._fillmode()
-  }
-  /**
-   * @method _debounce
-   * @description simple debounce
-   */
-  private _debounce (callback: object, time: number) {
-    let timeout
-    return function () {
-      clearTimeout(timeout) // this clears the timeout so callback in timeout is not called
-      timeout = setTimeout(callback, time)
-    }
   }
   /**
    * @method _loadImage
@@ -199,7 +163,7 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
    * @description create the observer
    */
   private _createObserver () {
-    if (this._active !== undefined) return
+    if (this._active !== undefined || typeof IntersectionObserver !== 'function') return
 
     this._observer = new IntersectionObserver((changes) => {
       changes.forEach((change) => {
@@ -208,6 +172,7 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
         }
       })
     }, {
+      rootMargin: this.offset,
       threshold: this.threshold
     })
     this._observer.observe(this)
@@ -301,6 +266,21 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
    */
   get threshold () {
     return this._threshold
+  }
+  /**
+  * @method setter offset
+  * @description set the offset property
+   */
+  set offset (offset: string) {
+    if (this._offset === offset) return
+    this._offset = offset
+  }
+  /**
+  * @method getter offset
+  * @description get the offset property
+   */
+  get offset () {
+    return this._offset
   }
   /**
   * @method setter aspectRatio

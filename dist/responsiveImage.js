@@ -24,23 +24,36 @@ template.innerHTML = `<style>
       min-width: none;
       max-height: none;
       min-height: none;
-    }
-    :host([resizing]) img[fillmode="height"]{
       height: 100%;
-      width: auto;
-    }
-    :host([resizing]) img[fillmode="width"]{
-      height: auto;
       width: 100%;
+      object-fit: cover;
     }
-    :host([align="center"]) img{
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+    :host([align="top"]) img{
+      object-position: center top;
+    }
+    :host([align="bottom"]) img{
+      object-position: center bottom;
+    }
+    :host([align="left"]) img{
+      object-position: left center;
     }
     :host([align="right"]) img{
-      position: absolute;
-      right: 0;
+      object-position: right center;
+    }
+    :host([align="top-left"]) img{
+      object-position: left top;
+    }
+    :host([align="top-right"]) img{
+      object-position: right top;
+    }
+    :host([align="bottom-left"]) img{
+      object-position: left bottom;
+    }
+    :host([align="bottom-right"]) img{
+      object-position: right bottom;
+    }
+    :host([resizing="false"]) img{
+      object-fit: none;
     }
     figure{
       margin: 0;
@@ -68,7 +81,8 @@ class ResponsiveImage extends HTMLElement {
         this._figure = null;
         this._aspectRatio = null;
         this._observer = null;
-        this._threshold = 0.5;
+        this._threshold = 0;
+        this._offset = `100px`;
         let shadowRoot = this.attachShadow({ mode: 'open' });
         if (typeof ShadyCSS !== 'undefined') {
             ShadyCSS.prepareTemplate(template, 'responsive-image');
@@ -77,7 +91,7 @@ class ResponsiveImage extends HTMLElement {
         shadowRoot.appendChild(document.importNode(template.content, true));
     }
     static get observedAttributes() {
-        return ['src', 'placeholder', 'active', 'threshold', 'ratio'];
+        return ['src', 'placeholder', 'active', 'threshold', 'offset', 'ratio'];
     }
     attributeChangedCallback(attrName, oldVal, newVal) {
         this[attrName] = newVal;
@@ -88,40 +102,6 @@ class ResponsiveImage extends HTMLElement {
         this._createObserver();
         this._figure = this.shadowRoot.querySelector('figure');
         this._img = this.shadowRoot.querySelector('img');
-        if (typeof window.nucleiResponsiveImages === 'undefined' || window.nucleiResponsiveImages.length <= 0) {
-            window.nucleiResponsiveImages = [];
-            window.addEventListener('resize', this._debounce(this._resizeEvent, 50));
-        }
-        window.nucleiResponsiveImages.push(this);
-        setTimeout(() => {
-            this._checkOrientation(this);
-        }, 10);
-        setTimeout(() => {
-            this._checkOrientation(this);
-        }, 300);
-    }
-    _resizeEvent() {
-        window.nucleiResponsiveImages.forEach((element, index) => {
-            if (!document.body.contains(element))
-                return window.nucleiResponsiveImages.splice(index, 1);
-            element._checkOrientation(element);
-        });
-    }
-    _checkOrientation(element) {
-        if (element.clientWidth > element.clientHeight) {
-            element.setAttribute('orientation', 'landscape');
-        }
-        else {
-            element.setAttribute('orientation', 'portrait');
-        }
-        this._fillmode();
-    }
-    _debounce(callback, time) {
-        let timeout;
-        return function () {
-            clearTimeout(timeout);
-            timeout = setTimeout(callback, time);
-        };
     }
     _loadImage() {
         if (this._src === null || this._active !== 'true')
@@ -150,7 +130,7 @@ class ResponsiveImage extends HTMLElement {
         }
     }
     _createObserver() {
-        if (this._active !== undefined)
+        if (this._active !== undefined || typeof IntersectionObserver !== 'function')
             return;
         this._observer = new IntersectionObserver((changes) => {
             changes.forEach((change) => {
@@ -159,6 +139,7 @@ class ResponsiveImage extends HTMLElement {
                 }
             });
         }, {
+            rootMargin: this.offset,
             threshold: this.threshold
         });
         this._observer.observe(this);
@@ -213,6 +194,14 @@ class ResponsiveImage extends HTMLElement {
     }
     get threshold() {
         return this._threshold;
+    }
+    set offset(offset) {
+        if (this._offset === offset)
+            return;
+        this._offset = offset;
+    }
+    get offset() {
+        return this._offset;
     }
     set ratio(aspectRatio) {
         if (this._aspectRatio === aspectRatio)

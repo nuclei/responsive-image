@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Web Component Skeleton</title>
-    <script src="polyfill/webcomponents-loader.js"></script>
+    <script src="polyfill/webcomponents-hi-sd-ce.js"></script>
     <script src="./responsiveImage.js"></script>
   </head>
   <body>
@@ -16,17 +16,29 @@
     >Image Caption</responsive-image>
     <div style="padding-top: 1000px;"></div>
     <responsive-image
-      active="true"
+      placeholder="placeholder.png"
+      src="nature-forest-trees-fog.jpeg"
+      alt="yo"
+    ></responsive-image>
+    <responsive-image
+      placeholder="placeholder.png"
+      src="nature-forest-trees-fog-2.jpeg"
+      alt="yo"
+      offset="500px"
+    ></responsive-image><
+    <responsive-image
       placeholder="placeholder.png"
       src="https://unsplash.it/600/800"
       alt="yo"
       ratio="4:3"
+      align="right-bottom"
+      threshold="0.5"
+      offset="0px"
     >Image Caption</responsive-image>
-<!-- threshold="0.434" -->
     <responsive-image
       active="true"
       placeholder="placeholder.png"
-      src="nature-forest-trees-fog.jpeg"
+      src="nature-forest-trees-fog-3.jpeg"
       alt="yo"
     ></responsive-image>
 
