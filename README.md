@@ -44,6 +44,13 @@ A ratio can be defined as width to height, e.g. `4:3` or as a percentage value t
 ### Resizing
 When the `resizing` attribute is present on a `<responsive-image>` the image will resize to always fill the full height and width. The aspect ratio of the image will be kept but part of the image might be cut off.
 
+### Align
+**Warning:** [`object-fit`](https://caniuse.com/#search=object-fit) and [`object-position`](https://caniuse.com/#search=object-fit) is used for the align options, so make sure the support fits with your target audience.
+
+This property is used to indicate how the image should be positioned when part of it is cropped, e.g. position it in the `bottom left` corner so that it will overflow on the top and right. The default is `center center`
+
+Available options are: `top`, `bottom`, `left`, `right`, `top-right`, `top-left`, `bottom-right`, `bottom-left`.
+
 ### Active
 If `active` is set to true the image will be lazyloaded immediately, even when not in view.
 
