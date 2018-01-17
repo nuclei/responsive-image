@@ -54,10 +54,13 @@ Available options are: `top`, `bottom`, `left`, `right`, `top-right`, `top-left`
 ### Active
 If `active` is set to true the image will be lazy-loaded immediately, even when not in view.
 
-### Threshold & IntersectionObserver
+### Threshold
+If you use the *load when in viewport* functionality, you can use the `threshold` property to define how much of the image needs to be visible in the viewport to trigger a load event. The default is `0`, so as soon as 1px of the the offset is in the viewport, the image will be loaded.
 
-### Load when in viewport
+### Offset
+The `offset` property defines at what distance from the visible viewport, the image will be loaded. The default offset of `100px` means that as soon as the images is within `100px` of the viewport, it will be loaded. Set the offset to `0` to disable it.
 
+### Polyfill for IntersectionObserver
 This packages uses the `IntersectionObserver` to detect if an image is in the viewport or not. If you want to use this in browsers that do [not support the `IntersectionObserver`](http://caniuse.com/#search=IntersectionObserver) you need to include a polyfill: https://github.com/WICG/IntersectionObserver/tree/gh-pages/polyfill
 
 If you want to use this package just for its lazy-loading or if you build your own detection which triggers loading by setting `active` to true, you do not need to use the polyfill.

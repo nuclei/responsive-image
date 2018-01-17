@@ -81,7 +81,8 @@ class ResponsiveImage extends HTMLElement {
         this._figure = null;
         this._aspectRatio = null;
         this._observer = null;
-        this._threshold = 0.5;
+        this._threshold = 0;
+        this._offset = `100px`;
         let shadowRoot = this.attachShadow({ mode: 'open' });
         if (typeof ShadyCSS !== 'undefined') {
             ShadyCSS.prepareTemplate(template, 'responsive-image');
@@ -90,7 +91,7 @@ class ResponsiveImage extends HTMLElement {
         shadowRoot.appendChild(document.importNode(template.content, true));
     }
     static get observedAttributes() {
-        return ['src', 'placeholder', 'active', 'threshold', 'ratio'];
+        return ['src', 'placeholder', 'active', 'threshold', 'offset', 'ratio'];
     }
     attributeChangedCallback(attrName, oldVal, newVal) {
         this[attrName] = newVal;
@@ -138,6 +139,7 @@ class ResponsiveImage extends HTMLElement {
                 }
             });
         }, {
+            rootMargin: this.offset,
             threshold: this.threshold
         });
         this._observer.observe(this);
@@ -192,6 +194,14 @@ class ResponsiveImage extends HTMLElement {
     }
     get threshold() {
         return this._threshold;
+    }
+    set offset(offset) {
+        if (this._offset === offset)
+            return;
+        this._offset = offset;
+    }
+    get offset() {
+        return this._offset;
     }
     set ratio(aspectRatio) {
         if (this._aspectRatio === aspectRatio)

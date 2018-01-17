@@ -76,7 +76,8 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
   private _figure = null // eslint-disable-line no-undef
   private _aspectRatio = null // eslint-disable-line no-undef
   private _observer = null // eslint-disable-line no-undef
-  private _threshold: number = 0.5 // eslint-disable-line no-undef
+  private _threshold: number = 0 // eslint-disable-line no-undef
+  private _offset: string = `100px` // eslint-disable-line no-undef
 
   constructor () {
     // If you define a ctor, always call super() first!
@@ -98,7 +99,7 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
    * @description return attributes that should be watched for updates
     */
   static get observedAttributes () {
-    return ['src', 'placeholder', 'active', 'threshold', 'ratio']
+    return ['src', 'placeholder', 'active', 'threshold', 'offset', 'ratio']
   }
    /**
    * @method attributeChangedCallback
@@ -171,6 +172,7 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
         }
       })
     }, {
+      rootMargin: this.offset,
       threshold: this.threshold
     })
     this._observer.observe(this)
@@ -264,6 +266,21 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
    */
   get threshold () {
     return this._threshold
+  }
+  /**
+  * @method setter offset
+  * @description set the offset property
+   */
+  set offset (offset: string) {
+    if (this._offset === offset) return
+    this._offset = offset
+  }
+  /**
+  * @method getter offset
+  * @description get the offset property
+   */
+  get offset () {
+    return this._offset
   }
   /**
   * @method setter aspectRatio
