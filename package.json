@@ -13,10 +13,10 @@
   "author": "Lukas Oppermann",
   "license": "MIT",
   "devDependencies": {
-    "@webcomponents/webcomponentsjs": "^1.0.20",
+    "@webcomponents/webcomponentsjs": "^1.1.0",
     "readyjs": "^2.0.0",
     "rollup": "^0.50.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-node-resolve": "^3.0.2",
     "rollup-plugin-typescript": "^0.8.1",
     "rollup-watch": "^4.0.0",
     "snazzy": "^7.0.0",

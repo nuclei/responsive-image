@@ -10,6 +10,7 @@ var ready = function (fn) {
     }
 };
 
+'use strict';
 let template = document.createElement('template');
 template.innerHTML = `<style>
     :host{
@@ -75,6 +76,7 @@ class ResponsiveImage extends HTMLElement {
     constructor() {
         super();
         this._src = null;
+        this._srcset = null;
         this._placeholder = null;
         this._active = undefined;
         this._img = null;
@@ -91,7 +93,7 @@ class ResponsiveImage extends HTMLElement {
         shadowRoot.appendChild(document.importNode(template.content, true));
     }
     static get observedAttributes() {
-        return ['src', 'placeholder', 'active', 'threshold', 'offset', 'ratio'];
+        return ['src', 'srcset', 'placeholder', 'active', 'threshold', 'offset', 'ratio'];
     }
     attributeChangedCallback(attrName, oldVal, newVal) {
         this[attrName] = newVal;
@@ -109,10 +111,17 @@ class ResponsiveImage extends HTMLElement {
         let _img = document.createElement('img');
         _img.addEventListener('load', () => {
             this._img.setAttribute('src', this._src);
+            if (this._srcset !== null) {
+                this._img.setAttribute('srcset', this._srcset);
+            }
             this._fillmode();
         });
         ready(() => {
             _img.setAttribute('src', this._src);
+            if (this._srcset !== null) {
+                _img.setAttribute('srcset', this._srcset);
+            }
+            this.dispatchEvent(new CustomEvent('loaded'));
             this._destroyObserver();
         });
     }
@@ -164,6 +173,14 @@ class ResponsiveImage extends HTMLElement {
     }
     get src() {
         return this._src;
+    }
+    set srcset(srcset) {
+        if (this._srcset === srcset)
+            return;
+        this._srcset = srcset;
+    }
+    get srcset() {
+        return this._srcset;
     }
     set placeholder(placeholder) {
         if (this._placeholder === placeholder)

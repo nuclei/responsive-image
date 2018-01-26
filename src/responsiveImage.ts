@@ -1,4 +1,4 @@
-/* global HTMLElement IntersectionObserver */
+/* global HTMLElement IntersectionObserver CustomEvent */
 'use strict'
 
 import { ready } from '../node_modules/readyjs/dist/ready.js'
@@ -70,6 +70,7 @@ template.innerHTML = `<style>
 class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-vars
   /* Typescript: declare variables */
   private _src: string = null // eslint-disable-line no-undef
+  private _srcset: string = null // eslint-disable-line no-undef
   private _placeholder: string = null // eslint-disable-line no-undef
   private _active: string = undefined // eslint-disable-line no-undef
   private _img = null // eslint-disable-line no-undef
@@ -99,7 +100,7 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
    * @description return attributes that should be watched for updates
     */
   static get observedAttributes () {
-    return ['src', 'placeholder', 'active', 'threshold', 'offset', 'ratio']
+    return ['src', 'srcset', 'placeholder', 'active', 'threshold', 'offset', 'ratio']
   }
    /**
    * @method attributeChangedCallback
@@ -129,11 +130,20 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
     let _img = document.createElement('img')
     _img.addEventListener('load', () => {
       this._img.setAttribute('src', this._src)
+      if (this._srcset !== null) {
+        this._img.setAttribute('srcset', this._srcset)
+      }
       this._fillmode()
     })
 
     ready(() => {
       _img.setAttribute('src', this._src)
+      if (this._srcset !== null) {
+        _img.setAttribute('srcset', this._srcset)
+      }
+      // fire event when image is loaded
+      this.dispatchEvent(new CustomEvent('loaded'))
+      // desctroy observer once image is loaded
       this._destroyObserver()
     })
   }
@@ -212,6 +222,21 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
    */
   get src () {
     return this._src
+  }
+  /**
+  * @method setter srcset
+  * @description set the srcset property
+   */
+  set srcset (srcset: string) {
+    if (this._srcset === srcset) return
+    this._srcset = srcset
+  }
+  /**
+  * @method getter srcset
+  * @description get the srcset property
+   */
+  get srcset () {
+    return this._srcset
   }
   /**
   * @method setter placeholder

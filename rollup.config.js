@@ -5,11 +5,13 @@ import nodeResolve from 'rollup-plugin-node-resolve'
 const pkg = require('./package')
 
 export default {
-  entry: pkg.config.src,
+  input: pkg.config.src,
   moduleId: pkg.name,
-  dest: pkg.main,
-  format: 'iife',
-  sourceMap: true,
+  output: {
+    file: pkg.main,
+    format: 'iife'
+  },
+  sourcemap: true,
   plugins: [
     typescript({
       typescript: require('typescript'),

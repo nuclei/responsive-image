@@ -42,7 +42,7 @@ A ratio can be defined as width to height, e.g. `4:3` or as a percentage value t
 ```
 
 ### Resizing
-When the `resizing` attribute is present on a `<responsive-image>` the image will resize to always fill the full height and width. The aspect ratio of the image will be kept but part of the image might be cut off.
+When the `resizing` attribute is set to none on a `<responsive-image>` the image will not resize to fit the container.
 
 ### Align
 **Warning:** [`object-fit`](https://caniuse.com/#search=object-fit) and [`object-position`](https://caniuse.com/#search=object-fit) is used for the align options, so make sure the support fits with your target audience.
@@ -50,6 +50,9 @@ When the `resizing` attribute is present on a `<responsive-image>` the image wil
 This property is used to indicate how the image should be positioned when part of it is cropped, e.g. position it in the `bottom left` corner so that it will overflow on the top and right. The default is `center center`
 
 Available options are: `top`, `bottom`, `left`, `right`, `top-right`, `top-left`, `bottom-right`, `bottom-left`.
+
+### src, srcset & sizes
+Just like on any image you can use the `src` attribute to define the image src, as well as a combination of `srcset` and `sizes` to define responsive media.
 
 ### Active
 If `active` is set to true the image will be lazy-loaded immediately, even when not in view.
@@ -60,7 +63,11 @@ If you use the *load when in viewport* functionality, you can use the `threshold
 ### Offset
 The `offset` property defines at what distance from the visible viewport, the image will be loaded. The default offset of `100px` means that as soon as the images is within `100px` of the viewport, it will be loaded. Set the offset to `0` to disable it.
 
-### Polyfill for IntersectionObserver
+## Events
+### loaded
+When an image is loaded it fires the `loaded` event.
+
+## Polyfill for IntersectionObserver
 This packages uses the `IntersectionObserver` to detect if an image is in the viewport or not. If you want to use this in browsers that do [not support the `IntersectionObserver`](http://caniuse.com/#search=IntersectionObserver) you need to include a polyfill: https://github.com/WICG/IntersectionObserver/tree/gh-pages/polyfill
 
 If you want to use this package just for its lazy-loading or if you build your own detection which triggers loading by setting `active` to true, you do not need to use the polyfill.
