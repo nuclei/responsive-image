@@ -1,12 +1,12 @@
 # Responsive Image
 [![Spec Custom Elements V1](https://img.shields.io/badge/spec-custom%20elements%20v1-F52757.svg?style=flat-square)](https://www.w3.org/TR/custom-elements/)
 [![Build Status](https://img.shields.io/travis/nuclei/responsive-image/master.svg?style=flat-square)](https://travis-ci.org/nuclei/responsive-image) [![npm](https://img.shields.io/npm/v/responsive-image.svg?style=flat-square)](https://www.npmjs.com/package/responsive-image)
-[![Known Vulnerabilities](https://snyk.io/test/github/nuclei/responsive-image/badge.svg?style=flat-square)](https://snyk.io/test/github/nuclei/responsive-image) [![npm](https://img.shields.io/npm/dt/responsive-image.svg?style=flat-square)](https://www.npmjs.com/package/responsive-image) [![license](https://img.shields.io/github/license/nuclei/responsive-image.svg?style=flat-square)](https://github.com/nuclei/responsive-image/blob/master/LICENSE)
+[![Known Vulnerabilities](https://snyk.io/test/github/nuclei/responsive-image/badge.svg?style=flat-square)](https://snyk.io/test/github/nuclei/responsive-image) [![npm](https://img.shields.io/npm/dt/@nuclei-components/responsive-image.svg?style=flat-square)](https://www.npmjs.com/package/responsive-image) [![license](https://img.shields.io/github/license/nuclei/responsive-image.svg?style=flat-square)](https://github.com/nuclei/responsive-image/blob/master/LICENSE)
 
 ## Installation
 Simply  install the responsive image component using npm.
 ```
-$ npm i responsive-image -S
+$ npm i -S @nuclei-components/responsive-image
 ```
 ## Usage
 To use the webcomponent you need to load it into your page, either by bundling it into your js bundle or by simply loading it via a script tag.
