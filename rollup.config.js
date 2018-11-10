@@ -6,12 +6,12 @@ const pkg = require('./package')
 
 export default {
   input: pkg.config.src,
-  moduleId: pkg.name,
   output: {
     file: pkg.main,
-    format: 'iife'
+    name: pkg.moduleName,
+    format: 'iife',
+    sourcemap: true
   },
-  sourcemap: true,
   plugins: [
     typescript({
       typescript: require('typescript'),

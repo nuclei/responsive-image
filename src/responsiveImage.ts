@@ -85,7 +85,7 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
     // This is specific to CE and required by the spec.
     super()
     // create shadowRoot
-    let shadowRoot = this.attachShadow({mode: 'open'})
+    let shadowRoot = this.attachShadow({ mode: 'open' })
     // check if polyfill is used
     if (typeof ShadyCSS !== 'undefined') {
       ShadyCSS.prepareTemplate(template, 'responsive-image') // eslint-disable-line no-undef
@@ -102,10 +102,10 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
   static get observedAttributes () {
     return ['src', 'srcset', 'placeholder', 'active', 'threshold', 'offset', 'ratio']
   }
-   /**
+  /**
    * @method attributeChangedCallback
    * @description runs once an attribute is changed
-    */
+   */
   attributeChangedCallback (attrName: string, oldVal, newVal) {
     this[attrName] = newVal
   }
@@ -133,7 +133,6 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
       if (this._srcset !== null) {
         this._img.setAttribute('srcset', this._srcset)
       }
-      this._fillmode()
     })
 
     ready(() => {
@@ -155,18 +154,6 @@ class ResponsiveImage extends HTMLElement { // eslint-disable-line no-unused-var
     if (this._placeholder === null) return
 
     this.shadowRoot.querySelector('img').setAttribute('src', this._placeholder)
-  }
-  /**
-   * @method _fillmode
-   * @description define the fillmode
-   */
-  private _fillmode () {
-    if (this._img.clientWidth < this._figure.clientWidth) {
-      this._img.setAttribute('fillmode', 'width')
-    }
-    if (this._img.clientHeight < this._figure.clientHeight) {
-      this._img.setAttribute('fillmode', 'height')
-    }
   }
   /**
    * @method _createObserver
