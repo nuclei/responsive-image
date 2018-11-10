@@ -1,7 +1,7 @@
 {
   "name": "@nuclei-components/responsive-image",
   "moduleName": "responsiveImage",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "A responsive image tags, with lazy loading",
   "main": "dist/responsiveImage.js",
   "config": {
